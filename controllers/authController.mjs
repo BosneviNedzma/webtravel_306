@@ -115,7 +115,7 @@ export const forgotPassword = catchAsync(async (request, response, next) => {
 
   const resetURL = `${request.protocol}://${request.get(
     'host',
-  )}/api/v1/users/resetPassword/${resetToken}`;
+  )}/users/resetPassword/${resetToken}`;
 
   const message = `Zaboravili ste lozinku? Pošaljite PATCH zahtjev sa vašom novom lozinkom i potvrdom lozinke na: ${resetURL}.\nAko niste zaboravili lozinku, molimo vas da zanemarite ovaj email!`;
 
