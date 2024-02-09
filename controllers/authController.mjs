@@ -38,16 +38,16 @@ export const login = catchAsync(async (request, response, next) => {
   const { email, password } = request.body;
 
   if (!email || !password)
-    return next(new AppError('Please provide email & password!!!', 400));
+    return next(new AppError("Molim vas da pružite e-mail i šifru!", 400));
 
 
   const user = await User.findOne({ email }).select('+password');
 
   if (!user || !(await user.comparePassword(password, user.password)))
-    return next(new AppError('Incorect Email or Password!!!', 401));
+    return next(new AppError("Netočan e-mail ili lozinka!", 401));
 
   if (user.status !== 'active') {
-    return next(new AppError('Your account is inactive. Please contact support.', 401));
+    return next(new AppError("Vaš račun je neaktivan. Molimo vas da kontaktirate podršku.", 401));
   }
   createAndSendToken(user, 200, response);
 });
@@ -65,7 +65,7 @@ export const protect = catchAsync(async (request, response, next) => {
   if (!token)
     return next(
       new AppError(
-        'You are not logged in! Please log in to get access!!!',
+        "Niste prijavljeni. Molimo vas da se prijavite kako biste dobili pristup.",
         401,
       ),
     );
@@ -75,12 +75,12 @@ export const protect = catchAsync(async (request, response, next) => {
   const user = await User.findById(verifiedToken.id);
 
   if (!user)
-    return next(new AppError('This user does no longer exist!!!', 401));
+    return next(new AppError("Ovaj korisnik više ne postoji.", 401));
 
   if (user.changedPasswordAfterToken(verifiedToken.iat))
     return next(
       new AppError(
-        'User has recently changed password! Please log in again to get access!!!',
+        "Korisnik je nedavno promijenio lozinku. Molimo vas da se ponovno prijavite kako biste dobili pristup.",
         401,
       ),
     );
